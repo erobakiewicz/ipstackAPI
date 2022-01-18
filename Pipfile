@@ -9,6 +9,7 @@ django-rest-framework = "*"
 djangorestframework-simplejwt = "*"
 django-environ = "*"
 psycopg2-binary = "*"
+requests = "*"
 
 [dev-packages]
 
