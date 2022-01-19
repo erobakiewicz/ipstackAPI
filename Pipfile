@@ -10,6 +10,7 @@ djangorestframework-simplejwt = "*"
 django-environ = "*"
 psycopg2-binary = "*"
 requests = "*"
+gunicorn = "*"
 
 [dev-packages]
 

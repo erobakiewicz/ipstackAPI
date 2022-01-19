@@ -1,2 +1,2 @@
 release: python manage.py migrate --noinput
-web: gunicorn src.wsgi
+web: gunicorn ipstackAPI.wsgi
