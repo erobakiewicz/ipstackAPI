@@ -23,7 +23,7 @@ class IPStackConnector:
         )
         if response.status_code != 200:
             raise IPStackConnectorError
-        return response
+        return response.json()
 
     @staticmethod
     def get_clean_ip(ip):

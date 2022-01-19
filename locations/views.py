@@ -18,7 +18,6 @@ class GeolocationViewSet(mixins.CreateModelMixin,
         ip = self.request.data.get("ip")
         ip_stack_connector = IPStackConnector(ip)
         data = ip_stack_connector.get_data()
-        print(data.__dict__)
         serializer = self.get_serializer(data=data)
         serializer.is_valid(raise_exception=True)
         self.perform_create(serializer)
