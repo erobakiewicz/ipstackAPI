@@ -2,13 +2,14 @@ import re
 import requests
 
 from django.conf import settings
+from rest_framework.exceptions import APIException
 
 IP_REGEX = r'[0-9]+(?:\.[0-9]+){3}'
 BASE_URL = f'http://api.ipstack.com/'
 
 
-class IPStackConnectorError(Exception):
-    pass
+class IPStackConnectorError(APIException):
+    default_detail = 'Service temporarily unavailable, try again later.'
 
 
 class IPStackConnector:
@@ -22,11 +23,15 @@ class IPStackConnector:
             url=self.ipstack_url,
         )
         if response.status_code != 200:
-            raise IPStackConnectorError
+            raise IPStackConnectorError(f'Failed, status code {response.status_code}, reason: {response.json()}')
         return response.json()
 
     @staticmethod
     def get_clean_ip(ip):
+        """
+        Function takes str and checks if it contains valid IP address and returns just the IP omitting rest of str.
+        If no valid IP address error is raised.
+        """
         if valid_ip := (re.findall(IP_REGEX, ip)):
             return valid_ip[0]
         else:
