@@ -19,6 +19,9 @@ class IPStackConnector:
         self.ipstack_url = f'{BASE_URL}{self.ip}?access_key={settings.IPSTACK_ACCESS_KEY}'
 
     def get_data(self):
+        """
+        Takes ip stack endpoint url with IP address and returns in response IP geolocation data.
+        """
         response = requests.get(
             url=self.ipstack_url,
         )
@@ -29,7 +32,7 @@ class IPStackConnector:
     @staticmethod
     def get_clean_ip(ip):
         """
-        Function takes str and checks if it contains valid IP address and returns just the IP omitting rest of str.
+        Takes str and checks if it contains valid IP address and returns just the IP omitting rest of str.
         If no valid IP address error is raised.
         """
         if valid_ip := (re.findall(IP_REGEX, ip)):

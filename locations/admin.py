@@ -1,3 +1,8 @@
 from django.contrib import admin
 
-# Register your models here.
+from locations.models import Geolocation
+
+
+@admin.register(Geolocation)
+class GeolocationAdmin(admin.ModelAdmin):
+    pass
