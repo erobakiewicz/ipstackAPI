@@ -5,7 +5,7 @@ from rest_framework.response import Response
 
 from locations.models import Geolocation
 from locations.serializers import GeolocationSerializer
-from locations.services.ipstack import IPStackConnector, IPStackConnectorError
+from locations.services.ipstack import IPStackConnector, IPStackConnectorError, IP_REGEX
 
 
 class GeolocationViewSet(mixins.CreateModelMixin,
@@ -16,6 +16,8 @@ class GeolocationViewSet(mixins.CreateModelMixin,
     serializer_class = GeolocationSerializer
     queryset = Geolocation.objects.all()
     permission_classes = (IsAuthenticated,)
+    lookup_field = 'ip'
+    lookup_value_regex = IP_REGEX
 
     def create(self, request, *args, **kwargs):
         ip = self.request.data.get("ip")
@@ -29,3 +31,8 @@ class GeolocationViewSet(mixins.CreateModelMixin,
         self.perform_create(serializer)
         headers = self.get_success_headers(serializer.data)
         return Response(serializer.data, status=status.HTTP_201_CREATED, headers=headers)
+
+    def destroy(self, request, *args, **kwargs):
+        instance = self.get_object()
+        self.perform_destroy(instance)
+        return Response(status=status.HTTP_204_NO_CONTENT)
