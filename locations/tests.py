@@ -1,6 +1,11 @@
+from unittest.mock import patch
+
 from django.contrib.auth.models import User
 from rest_framework import status
-from rest_framework.test import APIClient, APITestCase, force_authenticate
+from rest_framework.exceptions import ErrorDetail
+from rest_framework.test import APIClient, APITestCase
+
+from locations.models import Geolocation
 from locations.services.ipstack import IPStackConnector, IPStackConnectorError
 
 
@@ -38,12 +43,29 @@ class LocationsTestCase(APITestCase):
 
         self.assertEqual(response.status_code, status.HTTP_200_OK)
 
-    def test_geolcation_viewset_authentication_provided(self):
-        self.client.credentials(**{'Authorization': 'Bearer {}'.format(self.token)})
+    def test_geolcation_viewset_raises_wrong_ip(self):
         self.client.force_authenticate(user=self.user, token=self.token)
+        response = self.client.post("/geolocations/", data={"ip": "wrong_ip"}, format='json')
+        self.assertEqual(response.data.get("ip")[0],
+                         ErrorDetail(string='Enter a valid IPv4 or IPv6 address.', code='invalid'))
 
-        response = self.client.get("/geolocations/")
-        self.assertEqual(response.status_code, status.HTTP_200_OK)
+    @patch('locations.services.ipstack.IPStackConnector.get_data')
+    def test_geolcation_viewset_creates_geolocation_object_based_on_ip(self, mock_ip_stack):
+        mock_ip_stack.return_value = {
+            "ip": "84.10.2.58",
+            "type": "ipv4",
+            "continent_code": "EU",
+            "continent_name": "Europe",
+            "country_code": "PL",
+            "country_name": "Poland",
+            "region_code": "PM",
+            "region_name": "Pomerania",
+            "city": "Sopot",
+
+        }
+        self.client.force_authenticate(user=self.user, token=self.token)
+        response = self.client.post("/geolocations/", data={"ip": "84.10.2.58"}, format='json')
+        self.assertTrue(Geolocation.objects.get(ip="84.10.2.58"))
 
     def get_access_token(self):
         response = self.client.post(

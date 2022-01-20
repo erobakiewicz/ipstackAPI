@@ -17,9 +17,6 @@ class GeolocationViewSet(viewsets.ModelViewSet):
 
     def get_serializer_class(self):
         return self.serializer_classes.get(self.action, self.default_serializer_class)
-    
-    def create(self, request, *args, **kwargs):
-        super(GeolocationViewSet, self).create()
 
     def perform_create(self, serializer):
         ip = serializer.data.get('ip')
