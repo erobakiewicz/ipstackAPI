@@ -29,6 +29,6 @@ If refresh token is expired as well the process needs to be repeated.
 specific ones (based on id of an object).
    1. LIST - endpoint: `/geolocations/`, http method: GET, functionality: provides list of all stored geolocations of IP addresses
    2. RETRIEVE - endpoint: `/geolocations/<str:ip>/`, http method: GET, functionality: provides geolocation object for that IP address
-   3. ADD - endpoint: `/geolocations/`, http method: POST, parameter: key `ip` value is address we want to check,  functionality: 
+   3. ADD - endpoint: `/geolocations/`, http method: POST, parameter: key `ip` value is address we want to check and add to database, functionality: 
    if provided with proper IP address, checks using ip stack API service geolocation of an IP address and store selected information in database
    4. DESTROY - endpoint: `/geolocations/<str:ip>/`, http method: DELETE, functionality: deletes IP geolocation object for that IP address
