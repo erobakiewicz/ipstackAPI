@@ -19,7 +19,7 @@
 This is API to check and store geolocation based on IP or url.
 
 ### Authorization - authorization for users is done via JWT which uses access token (short-lived token)
-and refresh token (long-lived token). Using provided user credentials (`'username` and `password`, method POST)
+and refresh token (long-lived token). Using provided user credentials (`username` and `password`, method POST)
 request has to be made at `/token/` endpoint. In response, we get `access` token and `refresh` token.
 Access token is necessary to gain access to geolocation endpoint.
 Refresh token is necessary to obtain new access token when current one is expired. To obtain new access token request
