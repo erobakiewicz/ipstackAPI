@@ -17,9 +17,6 @@ class LocationsTestCase(APITestCase):
         cls.client = APIClient()
         cls.user = User.objects.create_user(username="test_user", password="test_password")
 
-    def setUp(self):
-        self.token = self.get_access_token()
-
     def test_get_clean_ip_raises_error_for_no_ip(self):
         wrong_ip = "192.0.1asd"
         with self.assertRaises(IPStackConnectorError):
@@ -66,11 +63,3 @@ class LocationsTestCase(APITestCase):
         self.client.force_authenticate(user=self.user, token=self.token)
         response = self.client.post("/geolocations/", data={"ip": "84.10.2.58"}, format='json')
         self.assertTrue(Geolocation.objects.get(ip="84.10.2.58"))
-
-    def get_access_token(self):
-        response = self.client.post(
-            "/token/",
-            data={'username': "test_user", "password": "test_password"},
-            format="json"
-        )
-        return response.data.get('access')
