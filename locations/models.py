@@ -9,8 +9,8 @@ class Geolocation(models.Model):
     city = models.CharField("city", max_length=250, blank=True)
 
     class Meta:
-        verbose_name = ''
-        verbose_name_plural = ''
+        verbose_name = 'Geolocation'
+        verbose_name_plural = 'Geolocations'
 
     def __str__(self):
         return f'{self.ip}: {self.country_name}'

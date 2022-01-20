@@ -40,14 +40,14 @@ class LocationsTestCase(APITestCase):
 
         self.assertEqual(response.status_code, status.HTTP_200_OK)
 
-    def test_geolcation_viewset_raises_wrong_ip(self):
+    def test_geolocation_viewset_raises_wrong_ip(self):
         self.client.force_authenticate(user=self.user)
         response = self.client.post("/geolocations/", data={"ip": "wrong_ip"}, format='json')
         self.assertEqual(response.data.get("ip")[0],
                          ErrorDetail(string='Enter a valid IPv4 or IPv6 address.', code='invalid'))
 
     @patch('locations.services.ipstack.IPStackConnector.get_data')
-    def test_geolcation_viewset_creates_geolocation_object_based_on_ip(self, mock_ip_stack):
+    def test_geolocation_viewset_creates_geolocation_object_based_on_ip(self, mock_ip_stack):
         mock_ip_stack.return_value = {
             "ip": "84.10.2.58",
             "type": "ipv4",
