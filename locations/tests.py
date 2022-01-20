@@ -41,7 +41,7 @@ class LocationsTestCase(APITestCase):
         self.assertEqual(response.status_code, status.HTTP_200_OK)
 
     def test_geolcation_viewset_raises_wrong_ip(self):
-        self.client.force_authenticate(user=self.user, token=self.token)
+        self.client.force_authenticate(user=self.user)
         response = self.client.post("/geolocations/", data={"ip": "wrong_ip"}, format='json')
         self.assertEqual(response.data.get("ip")[0],
                          ErrorDetail(string='Enter a valid IPv4 or IPv6 address.', code='invalid'))
@@ -60,6 +60,6 @@ class LocationsTestCase(APITestCase):
             "city": "Sopot",
 
         }
-        self.client.force_authenticate(user=self.user, token=self.token)
+        self.client.force_authenticate(user=self.user)
         response = self.client.post("/geolocations/", data={"ip": "84.10.2.58"}, format='json')
         self.assertTrue(Geolocation.objects.get(ip="84.10.2.58"))
